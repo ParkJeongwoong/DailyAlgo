@@ -7,10 +7,36 @@ export const showJson = (req, res) => {
   });
 };
 
-export const getArticles = (req, res) => {
+export const getArticles = async (req, res) => {
   try {
-    const rows = articleService.getArticles();
+    const rows = await articleService.getArticles();
     res.send(rows);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
+export const getArticleDetail = async (req, res) => {
+  try {
+    const article = await articleService.getArticleDetail(req.params.id);
+    console.log(article);
+    if (!article) {
+      return res.status(404).send("Article does not exist.");
+    }
+    res.status(200).json(article);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
+export const insertArticle = async (req, res) => {
+  try {
+    const rows = await articleService.insertArticle(
+      req.body.title,
+      req.body.writer,
+      req.body.content
+    );
+    res.status(200).send(rows);
   } catch (error) {
     return res.status(500).json(error);
   }
