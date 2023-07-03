@@ -4,7 +4,9 @@ import {
   getArticles,
   getArticleDetail,
   insertArticle,
-} from "./article.controller.js";
+  updateArticle,
+  deleteArticle,
+} from "./article.service.js";
 
 const articleRouter = express.Router();
 
@@ -18,6 +20,14 @@ articleRouter.get("/", (req, res) => {
 
 articleRouter.get("/:id", (req, res) => {
   getArticleDetail(req, res);
+});
+
+articleRouter.put("/:id", (req, res) => {
+  updateArticle(req, res);
+});
+
+articleRouter.delete("/:id", (req, res) => {
+  deleteArticle(req, res);
 });
 
 articleRouter.post("/", (req, res) => {
