@@ -1,10 +1,10 @@
-import express from "express";
+import express, { Application } from "express";
 import cors from "cors";
-import indexRouter from "./routers/index.js";
-import articleRouter from "./routers/articles/article.js";
+import indexRouter from "./routers/index";
+import articleRouter from "./routers/articles/article.router";
 
-const app = express();
-const PORT = 8080;
+const app: Application = express();
+const PORT: number = 8080;
 
 app.use(cors());
 app.use(express.json());

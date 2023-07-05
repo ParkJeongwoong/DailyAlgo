@@ -1,17 +1,11 @@
 import articleQuery from "./article.query.js";
 import db from "../../db.js";
+import { Request, Response } from "express";
 
-export const showJson = (req, res) => {
-  res.status(200).json({
-    response: "success",
-    message: "JSON 응답",
-  });
-};
-
-export const getArticles = async (req, res) => {
+export const getArticles = async (res: Response) => {
   try {
     await db.getConnection(conn => {
-      conn.query(articleQuery.getArticles, (error, rows, fields) => {
+      conn.query(articleQuery.getArticles, (error, rows) => {
         if (error) throw error;
         res.status(200).send(rows);
       });
@@ -21,14 +15,14 @@ export const getArticles = async (req, res) => {
   }
 };
 
-export const getArticleDetail = async (req, res) => {
+export const getArticleDetail = async (req: Request, res: Response) => {
   try {
     await db.getConnection(conn => {
       const params = [req.params.id];
       conn.query(
         articleQuery.getArticleDetail,
         params,
-        (error, rows, fields) => {
+        (error, rows) => {
           if (!rows || rows.length === 0) return null;
           const article = rows[0];
           if (error) throw error;
@@ -45,11 +39,11 @@ export const getArticleDetail = async (req, res) => {
   }
 };
 
-export const insertArticle = async (req, res) => {
+export const insertArticle = async (req: Request, res: Response) => {
   try {
     await db.getConnection(conn => {
       const params = [req.body.title, req.body.writer, req.body.content];
-      conn.query(articleQuery.insertArticle, params, (error, rows, fields) => {
+      conn.query(articleQuery.insertArticle, params, (error, rows) => {
         if (error) throw error;
         res.status(200).json(rows.insertId);
       });
@@ -59,7 +53,7 @@ export const insertArticle = async (req, res) => {
   }
 };
 
-export const updateArticle = async (req, res) => {
+export const updateArticle = async (req: Request, res: Response) => {
   try {
     await db.getConnection(conn => {
       const params = [
@@ -68,7 +62,7 @@ export const updateArticle = async (req, res) => {
         req.body.content,
         req.params.id,
       ];
-      conn.query(articleQuery.updateArticle, params, (error, rows, fields) => {
+      conn.query(articleQuery.updateArticle, params, (error, rows) => {
         if (error) throw error;
         res.status(200).json(rows.info);
       });
@@ -78,11 +72,11 @@ export const updateArticle = async (req, res) => {
   }
 };
 
-export const deleteArticle = async (req, res) => {
+export const deleteArticle = async (req: Request, res: Response) => {
   try {
     await db.getConnection(conn => {
       const params = [req.params.id];
-      conn.query(articleQuery.deleteArticle, params, (error, rows, fields) => {
+      conn.query(articleQuery.deleteArticle, params, (error, rows) => {
         if (error) throw error;
         res.status(200).json(rows.affectedRows);
       });
