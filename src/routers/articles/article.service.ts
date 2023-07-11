@@ -1,8 +1,8 @@
-import articleQuery from "./article.query.js";
+import articleQuery from "./article.query";
 import db from "../../db.js";
 import { Request, Response } from "express";
 
-export const getArticles = async (res: Response) => {
+export const getArticles = async (req: Request, res: Response) => {
   try {
     await db.getConnection(conn => {
       conn.query(articleQuery.getArticles, (error, rows) => {
@@ -23,14 +23,10 @@ export const getArticleDetail = async (req: Request, res: Response) => {
         articleQuery.getArticleDetail,
         params,
         (error, rows) => {
-          if (!rows || rows.length === 0) return null;
-          const article = rows[0];
           if (error) throw error;
-          if (article) {
-            res.status(200).json(article);
-          } else {
-            res.status(404).send("Article does not exist.");
-          }
+          if (!rows || rows.length === 0) return res.status(404).send("Article does not exist.");
+          const article = rows[0];
+          res.status(200).json(article);
         }
       );
     });
